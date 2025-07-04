@@ -1,0 +1,72 @@
+moz-transform
+-moz-transform
+foo Bar
+ foo    bar
+ääkkönen
+foo Bar
+some_class_name
+MozTransform
+Foo Bar
+  capitalize dash-CamelCase_underscore trim
+Abc
+Un éléphant à l'orée du bois
+HELLOworld
+This-is_snake case
+screaming-snake case
+my name is tristan
+this is a test
+The quick brown fox jumps over the lazy dog.
+Underscored-is-like  snake-case
+aabbccdd
+aabbccdd
+aabbccddaabbccdd
+aabbccdd
+a1 b2 c3 4d 5e 6f 12x y23 34z45
+a1 b2 c3 4d 5e
+6f 12x y23 34z45
+a-4 b-3 c-2 -1d 0e
+6f 12x y23 34z45
+a1 b2 c3 4d 5e 6f 12x y23 34z45
+a1 b2 c3 4d
+5e 6f 12x y23 34z45
+a-3 b-2 c-1 0d
+1e 6f 12x y23 34z45
+a1 b2 c3 4d 5e 6f 12x y23 34z45
+
+a1 b2 c3 4d 5e 6f 12x y23 34z45
+
+a1 b2 c3 4d 5e 6f 12x y23 34z45
+a14 b2 c3
+4d 5e 6f 7x y8 9z12
+\u0061\u0062\u0063\u4e2d\u6587\ud83d\udc96
+abc中文💖
+Hello, World!
+12345!@#$%
+Test123!
+'She said, "Hello"'
+"My name's Minalike"
+"He said, 'It's a trap!'"
+'She exclaimed, \"Wow!\"'
+"'Double' and 'single' quotes"
+No quotes at all
+'It's'
+"My name's %20 Minalike!"
+Lorem -1.234 ipsum 5.678 dolor sit amet, consectetur adipiscing.
+Sed do 9.876 eiusmod -4.321 tempor incididunt labore.
+abc009 def010 ghi001
+test001 value99 number000
+prefix007 suffix008 middle009
+009 010 001
+001 99 000
+007 008 009
+0009 0010 0001
+0001 0099 0000
+0007 0008 0009
+test01 value100 prefix007 99
+02 100 4
+010 100 123
+a001 b1
+c1 d01 e1
+f1 g1
+multi1 line2
+test3 data4
