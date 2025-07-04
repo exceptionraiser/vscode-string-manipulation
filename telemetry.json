@@ -1,0 +1,128 @@
+{
+  "extensionName": "String Manipulation",
+  "version": "0.7.38",
+  "telemetryDescription": "This document describes the telemetry data collected by the String Manipulation extension.",
+  "dataCollection": {
+    "respectsVSCodeTelemetrySetting": true,
+    "hasExtensionSpecificSetting": true,
+    "extensionTelemetrySetting": "stringManipulation.telemetry",
+    "description": "Telemetry data collection respects both VS Code's global telemetry setting and the extension-specific setting."
+  },
+  "collectedData": [
+    {
+      "eventName": "string-manipulation.command.executed",
+      "eventType": "telemetryEvent",
+      "purpose": "Track command usage and performance",
+      "dataClassification": "FeatureInsight",
+      "properties": {
+        "commandName": {
+          "description": "Name of the string manipulation command executed",
+          "type": "string",
+          "examples": [
+            "titleize",
+            "camelize",
+            "increment"
+          ]
+        },
+        "executionSource": {
+          "description": "How the command was executed",
+          "type": "string",
+          "examples": [
+            "command",
+            "preview",
+            "sidebar"
+          ]
+        },
+        "success": {
+          "description": "Whether the command executed successfully",
+          "type": "boolean"
+        },
+        "errorType": {
+          "description": "Type of error if command failed",
+          "type": "string",
+          "optional": true,
+          "examples": [
+            "invalid_number_input",
+            "user_cancelled_input",
+            "execution_error"
+          ]
+        }
+      },
+      "measurements": {
+        "executionTimeMs": {
+          "description": "Time taken to execute the command in milliseconds",
+          "type": "number"
+        },
+        "selectionCount": {
+          "description": "Number of text selections processed",
+          "type": "number"
+        }
+      }
+    },
+    {
+      "eventName": "string-manipulation.error",
+      "eventType": "telemetryErrorEvent",
+      "purpose": "Track errors for debugging and reliability improvements",
+      "dataClassification": "PerformanceAndHealth",
+      "properties": {
+        "errorType": {
+          "description": "Categorized type of error",
+          "type": "string",
+          "examples": [
+            "no_active_editor",
+            "preview_generation_error",
+            "command_not_found"
+          ]
+        },
+        "source": {
+          "description": "Source location where error occurred",
+          "type": "string",
+          "examples": [
+            "stringFunction.command",
+            "sidebar.applyCommand"
+          ]
+        },
+        "message": {
+          "description": "Error message (sanitized to avoid PII)",
+          "type": "string"
+        }
+      }
+    },
+    {
+      "eventName": "string-manipulation.feature.used",
+      "eventType": "telemetryEvent",
+      "purpose": "Track feature usage patterns",
+      "dataClassification": "FeatureInsight",
+      "properties": {
+        "featureName": {
+          "description": "Name of the feature used",
+          "type": "string",
+          "examples": [
+            "extension.activated",
+            "preview.opened",
+            "sidebar.opened",
+            "preview.command_selected"
+          ]
+        },
+        "commandName": {
+          "description": "Associated command name if applicable",
+          "type": "string",
+          "optional": true
+        }
+      }
+    }
+  ],
+  "dataRetention": {
+    "description": "Telemetry data is sent to Microsoft Application Insights and follows Microsoft's data retention policies."
+  },
+  "privacy": {
+    "piiCollection": false,
+    "userContentCollection": false,
+    "description": "No personally identifiable information (PII) or user content is collected. Only usage patterns, performance metrics, and error information are collected.",
+    "optOut": "Users can disable telemetry through VS Code's global telemetry setting or the extension-specific 'stringManipulation.telemetry' setting."
+  },
+  "contact": {
+    "issues": "https://github.com/marclipovsky/vscode-string-manipulation/issues",
+    "privacy": "For privacy concerns, please contact the extension maintainer through GitHub issues."
+  }
+}

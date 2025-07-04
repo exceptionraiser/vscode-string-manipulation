@@ -1,33 +1,35 @@
-name: "Publish to VS Code Marketplace"
+name: "Publish to Marketplace"
 
 on:
-  push:
-    branches:
-      - master
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [master]
 
 jobs:
   cd:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - name: Checkout to branch
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
 
       - name: Setup node.js
         uses: actions/setup-node@v4
-        with:
-          node-version: 20
 
       - name: "Bump version"
-        uses: 'phips28/gh-action-bump-version@master'
+        uses: "phips28/gh-action-bump-version@master"
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
         with:
-          minor-wording:  'MINOR'
-          major-wording:  'MAJOR'
-          patch-wording:  'PATCH,FIX'
-          rc-wording:     'RELEASE'
+          minor-wording: "MINOR"
+          major-wording: "MAJOR"
+          patch-wording: "PATCH,FIX"
+          rc-wording: "RELEASE"
 
       - name: Install packages
         run: npm ci
@@ -45,13 +47,28 @@ jobs:
       - name: Build VSIX package
         run: npm run package -- -o vscode-string-manipulation.v${{ steps.calculateVersion.outputs.AppVersion }}.vsix
 
-      - name: Publish extension package
+      - name: Publish extension package to Marketplace
         env:
           VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
         run: npm run vsce -- publish -p $VSCE_TOKEN
+
+      - name: Publish extension package to Open VSX Registry
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
+        run: npm run ovsx -- publish -p $OVSX_PAT
 
       - uses: actions/upload-artifact@v4
         name: Upload artifact
         with:
           name: vscode-string-manipulation.v${{ steps.calculateVersion.outputs.AppVersion }}.vsix
           path: vscode-string-manipulation.v${{ steps.calculateVersion.outputs.AppVersion }}.vsix
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.calculateVersion.outputs.AppVersion }}
+          name: Release v${{ steps.calculateVersion.outputs.AppVersion }}
+          files: vscode-string-manipulation.v${{ steps.calculateVersion.outputs.AppVersion }}.vsix
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
