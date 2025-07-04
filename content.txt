@@ -65,3 +65,8 @@ prefix007 suffix008 middle009
 test01 value100 prefix007 99
 02 100 4
 010 100 123
+a001 b1
+c1 d01 e1
+f1 g1
+multi1 line2
+test3 data4

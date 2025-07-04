@@ -422,6 +422,26 @@ suite("Extension Test Suite", () => {
       );
     });
 
+    test("increment handles multiline selections as single unit", async () => {
+      const [output] = await getTextForSelectionsByCommand(
+        "string-manipulation.increment",
+        [
+          {
+            start: { line: 70, character: 0 },
+            end: { line: 72, character: 10 },
+          },
+        ]
+      );
+
+      // Test that multiline selections are processed as a single unit
+      // Input: "multi1 line2\ntest3 data4"
+      // Expected: all numbers incremented by 1
+      assert.strictEqual(
+        output /* multi1 line2\ntest3 data4 */,
+        "multi2 line3test4 data5"
+      );
+    });
+
     test("decrement decreases all numbers in the selection by 1", async () => {
       const [output1, output2, output3] = await getTextForSelectionsByCommand(
         "string-manipulation.decrement",
@@ -452,6 +472,26 @@ suite("Extension Test Suite", () => {
       assert.strictEqual(
         output3 /* a-3 b-2 c-1 0d\n1e 6f 12x y23 34z45 */,
         "a-4 b-3 c-2 -1d0e 5f 11x y22 33z44"
+      );
+    });
+
+    test("decrement handles multiline selections as single unit", async () => {
+      const [output] = await getTextForSelectionsByCommand(
+        "string-manipulation.decrement",
+        [
+          {
+            start: { line: 70, character: 0 },
+            end: { line: 72, character: 10 },
+          },
+        ]
+      );
+
+      // Test that multiline selections are processed as a single unit
+      // Input: "multi1 line2\ntest3 data4"
+      // Expected: all numbers decremented by 1
+      assert.strictEqual(
+        output /* multi1 line2\ntest3 data4 */,
+        "multi0 line1test2 data3"
       );
     });
 
@@ -889,6 +929,26 @@ suite("Extension Test Suite", () => {
       assert.strictEqual(
         output2 /* 010 100 123 */,
         "005 006 007"
+      );
+    });
+
+    test("sequence handles multiline selections with consistent max-length padding", async () => {
+      const [output] = await getTextForSelectionsByCommand(
+        "string-manipulation.sequence",
+        [
+          {
+            start: { line: 67, character: 0 },
+            end: { line: 69, character: 6 },
+          },
+        ]
+      );
+
+      // Test the example from GitHub issue #74
+      // Input: "a001 b1\nc1 d01 e1\nf1 g1"
+      // Expected: all numbers should be padded to 3 digits (max length from "001")
+      assert.strictEqual(
+        output /* a001 b1\nc1 d01 e1\nf1 g1 */,
+        "a001 b002c003 d004 e005f006 g007"
       );
     });
 

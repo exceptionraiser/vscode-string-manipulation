@@ -14,30 +14,30 @@ export const sequence: CommandFunction = (
     }
     return 0;
   }));
-  
-  return str.replace(/-?\d+/g, (n) => {
+
+  return str.replaceAll(/-?\d+/g, (n) => {
     const isFirst = typeof multiselectData.offset !== "number";
     multiselectData.offset = isFirst
       ? Number(n)
       : (multiselectData.offset || 0) + 1;
-    
+
     const sequenceValue = multiselectData.offset;
-    
+
     // Use max length for consistent padding if any number in the string has leading zeros
     if (maxLength > 0) {
       const isNegative = sequenceValue < 0;
       const sequenceStr = String(sequenceValue);
-      
+
       if (isNegative) {
         // For negative numbers, pad after the minus sign
         const absStr = sequenceStr.substring(1);
-        return '-' + absStr.padStart(maxLength - 1, '0');
+        return "-" + absStr.padStart(maxLength - 1, "0");
       } else {
         // For positive numbers, pad the entire string
-        return sequenceStr.padStart(maxLength, '0');
+        return sequenceStr.padStart(maxLength, "0");
       }
     }
-    
+
     return String(sequenceValue);
   });
 };

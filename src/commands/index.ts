@@ -80,12 +80,12 @@ export const stringFunction = async (
 ): Promise<{ replacedSelections: string[] } | undefined> => {
   const startTime = Date.now();
   const editor = vscode.window.activeTextEditor;
-  
+
   if (!editor) {
     telemetryService.logError({
       errorType: "no_active_editor",
       source: `stringFunction.${executionSource}`,
-      message: "No active text editor found"
+      message: "No active text editor found",
     });
     return;
   }
@@ -107,7 +107,7 @@ export const stringFunction = async (
           executionSource,
           success: false,
           errorType: "user_cancelled_input",
-          selectionCount: editor.selections.length
+          selectionCount: editor.selections.length,
         });
         return;
       }
@@ -119,7 +119,7 @@ export const stringFunction = async (
           executionSource,
           success: false,
           errorType: "invalid_number_input",
-          selectionCount: editor.selections.length
+          selectionCount: editor.selections.length,
         });
         return;
       }
@@ -128,7 +128,9 @@ export const stringFunction = async (
       stringFunc = (str: string) =>
         (commandNameFunctionMap[commandName] as Function)(str, multiselectData);
     } else {
-      stringFunc = commandNameFunctionMap[commandName] as (str: string) => string;
+      stringFunc = commandNameFunctionMap[commandName] as (
+        str: string
+      ) => string;
     }
 
     if (
@@ -145,6 +147,13 @@ export const stringFunction = async (
       );
       selectionMap = result.selectionMap;
       replacedSelections = result.replacedSelections;
+    } else if (numberFunctionNames.includes(commandName)) {
+      for (const [index, selection] of editor.selections.entries()) {
+        const text = editor.document.getText(selection);
+        const replaced = stringFunc(text);
+        replacedSelections.push(replaced);
+        selectionMap[index] = { selection, replaced };
+      }
     } else {
       for (const [index, selection] of editor.selections.entries()) {
         const text = editor.document.getText(selection);
@@ -167,7 +176,10 @@ export const stringFunction = async (
         commandName === "duplicateAndIncrement" ||
         commandName === "duplicateAndDecrement"
       ) {
-        editor.selections = updateSelectionsAfterDuplicate(editor, selectionMap);
+        editor.selections = updateSelectionsAfterDuplicate(
+          editor,
+          selectionMap
+        );
       }
 
       context.globalState.update("lastAction", commandName);
@@ -180,7 +192,7 @@ export const stringFunction = async (
       executionSource,
       success: true,
       executionTimeMs: executionTime,
-      selectionCount: editor.selections.length
+      selectionCount: editor.selections.length,
     });
 
     return await Promise.resolve({ replacedSelections });
@@ -193,13 +205,13 @@ export const stringFunction = async (
       success: false,
       errorType: "execution_error",
       executionTimeMs: executionTime,
-      selectionCount: editor.selections.length
+      selectionCount: editor.selections.length,
     });
 
     telemetryService.logError({
       errorType: "command_execution_error",
       source: `stringFunction.${commandName}`,
-      message: error.message || String(error)
+      message: error.message || String(error),
     });
 
     throw error; // Re-throw to maintain existing error handling
