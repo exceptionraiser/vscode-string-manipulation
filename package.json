@@ -2,7 +2,7 @@
   "name": "string-manipulation",
   "displayName": "String Manipulation",
   "description": "Format strings to camelize, dasherize, etc.",
-  "version": "0.7.43",
+  "version": "0.7.44",
   "publisher": "marclipovsky",
   "repository": "https://github.com/marclipovsky/vscode-string-manipulation",
   "license": "MIT",
