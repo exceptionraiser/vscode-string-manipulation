@@ -8,6 +8,20 @@ import {
 } from "./commands";
 import { telemetryService } from "./telemetry";
 
+/**
+ * Generates a cryptographically random nonce for Content Security Policy.
+ * This prevents injection attacks by ensuring only scripts with the correct nonce can execute.
+ */
+function getNonce(): string {
+  let text = "";
+  const possible =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for (let i = 0; i < 32; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+}
+
 export class StringManipulationSidebar implements vscode.WebviewViewProvider {
   public static readonly viewType = "stringManipulationSidebar";
 
@@ -71,11 +85,18 @@ export class StringManipulationSidebar implements vscode.WebviewViewProvider {
   }
 
   private getHtmlForWebview(webview: vscode.Webview): string {
-    // You can use a more sophisticated HTML setup or a front-end framework
+    // Generate a nonce for Content Security Policy
+    const nonce = getNonce();
+
+    // Content Security Policy to restrict resource loading and prevent XSS attacks
+    const cspSource = webview.cspSource;
+
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}';">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>String Manipulation</title>
   <style>
      body {
@@ -114,7 +135,7 @@ export class StringManipulationSidebar implements vscode.WebviewViewProvider {
   <h3>Available Transformations</h3>
   <div id="commands"></div>
 
-  <script>
+  <script nonce="${nonce}">
     const vscode = acquireVsCodeApi();
 
     // Function to render commands
